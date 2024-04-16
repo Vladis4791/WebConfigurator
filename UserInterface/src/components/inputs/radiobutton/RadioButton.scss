@@ -1,0 +1,44 @@
+@use './../../../styles/colors' as c;
+
+.RadioButtonBlock {
+    display: flex;
+    margin-right: 20px;
+
+    .RadioButton {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
+
+    .label {
+        margin-left: 15px;
+    }
+
+    .circle {
+       display: none;
+    }
+
+    .RadioButton+.customRadioButton {
+        cursor: pointer;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid c.$border-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .RadioButton:checked+.customRadioButton {
+
+        border: 1px solid c.$theme-color;
+
+        .circle {
+            display: block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: c.$theme-color;
+        }
+    }
+}

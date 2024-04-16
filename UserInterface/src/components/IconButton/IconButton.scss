@@ -1,0 +1,12 @@
+.IconButton {
+    outline: none;
+    border: none;
+    background-color: inherit;
+    transition: background-color .2s;
+    padding: 3px;
+
+    &:hover:enabled {
+        background-color: #ccc;
+        cursor: pointer;    
+    }
+}

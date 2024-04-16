@@ -1,0 +1,13 @@
+.ToolMenuButtonBlock {
+
+    height: 100%;
+    width: 35px;
+
+    .ToolMenuButton {
+        background-color: transparent;
+        height: 70%;
+        outline: none;
+        border: none;
+        cursor: pointer;
+    }
+}

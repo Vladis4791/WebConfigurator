@@ -1,0 +1,34 @@
+@use './../../styles/colors' as c;
+
+.DeviceSelectItem {
+
+    position: relative;
+    .radio {
+        position: absolute;
+        z-index: -1;
+        opacity: 0;
+    }
+
+    .radio+label {
+        display: flex;
+        width: 100%;
+        border: 1px solid c.$border-color;
+        padding: 20px 40px;
+        box-sizing: border-box;
+        justify-content: space-between;
+
+        &:hover {
+          background-color: #f4f4f4;
+        }
+      }
+
+      .radio:checked+label {
+        color: #fff;
+        background-color: c.$theme-color;
+
+        .toolChecked {
+          font-weight: bold;
+        }
+      }
+      
+}

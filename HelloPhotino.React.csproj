@@ -1,0 +1,126 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0</TargetFramework>
+		<Platforms>AnyCPU</Platforms>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+    	<!-- Generate embedded file manifest when using the Photino.NET StaticFileServer -->
+		<GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+		<!--
+		Embed the the wwwroot files from the Resource folder into the executable
+		instead of accessing wwwroot files from a folder on the filesystem.
+		This will change the output directory of the React build output from
+		the `./wwwroot` folder to `./Resources/wwwroot`.
+		-->
+		<EmbedWwwRoot>false</EmbedWwwRoot>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="iTextSharp" Version="5.5.13.3" />
+		<PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="6.0.9" Condition=" '$(GenerateEmbeddedFilesManifest)' == 'true' " />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="Photino.NET" Version="2.3.0" />
+		<PackageReference Include="Photino.NET.Server" Version="1.0.0" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
+		<PackageReference Include="System.IO.Ports" Version="8.0.0" />
+		<PackageReference Include="System.Management" Version="8.0.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<UiRoot>UserInterface\</UiRoot>
+    <UiBuildOutput>build\</UiBuildOutput>
+		<WwwRoot Condition=" '$(EmbedWwwRoot)' != 'true' ">wwwroot\</WwwRoot>
+		<WwwRoot Condition=" '$(EmbedWwwRoot)' == 'true' ">Resources\wwwroot\</WwwRoot>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<!-- Don't publish the UI source files, but do show them in the project files list -->
+		<Content Remove="$(UiRoot)**" />
+		<None Remove="$(UiRoot)**" />
+		<None Include="$(UiRoot)**" Exclude="$(UiRoot)node_modules\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\**" Condition=" '$(GenerateEmbeddedFilesManifest)' == 'true' " />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Remove="Resources\Settings.settings" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\LogikaLibs\Logika\Logika.csproj" />
+	  <ProjectReference Include="..\Configurator.API\Configurator.API.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Properties\Resources.Designer.cs">
+	    <DesignTime>True</DesignTime>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Resources.resx</DependentUpon>
+	  </Compile>
+	  <Compile Update="Properties\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	  <Compile Update="Resources\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource ExcludeFromManifest="true" Update="Properties\Resources.resx">
+	    <Generator>ResXFileCodeGenerator</Generator>
+	    <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+	  </EmbeddedResource>
+	  <EmbeddedResource ExcludeFromManifest="true" Update="Resources\Settings.Designer.cs">
+	    <DesignTimeSharedInput>True</DesignTimeSharedInput>
+	    <AutoGen>True</AutoGen>
+	    <DependentUpon>Settings.settings</DependentUpon>
+	  </EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Properties\Settings.settings">
+	    <Generator>PublicSettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	  <None Update="Resources\Settings.settings">
+	    <Generator>SettingsSingleFileGenerator</Generator>
+	    <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+	<Target Name="EnsureNodeEnv" BeforeTargets="BuildUserInterface" Condition=" !Exists('$(UiRoot)node_modules') ">
+		<!-- Ensure Node.js is installed -->
+		<Exec Command="node --version" ContinueOnError="true">
+			<Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+		</Exec>
+		<Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+	</Target>
+
+	<Target Name="BuildUserInterface" BeforeTargets="BeforeBuild">
+		<!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+		<Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+		<!--<Exec WorkingDirectory="$(UiRoot)" Command="npm install" /> 
+		<Exec WorkingDirectory="$(UiRoot)" Command="npm run build" /> -->
+		
+		<ItemGroup>
+			<UiBuildOutputFiles Include="$(UiRoot)$(UiBuildOutput)**\*.*" />
+		</ItemGroup>
+		
+		<Copy SourceFiles="@(UiBuildOutputFiles)" DestinationFiles="@(UiBuildOutputFiles->'$(WwwRoot)%(RecursiveDir)%(Filename)%(Extension)')" />
+
+		<MakeDir Directories="$(TargetDir)\$(WwwRoot)" Condition=" '$(EmbedWwwRoot)' != 'true' And !Exists('$(TargetDir\$(WwwRoot)') " />
+
+		<Copy SourceFiles="@(UiBuildOutputFiles)" DestinationFiles="@(UiBuildOutputFiles->'$(TargetDir)\$(WwwRoot)%(RecursiveDir)%(Filename)%(Extension)')" Condition=" '$(EmbedWwwRoot)' != 'true' " />
+
+		<RemoveDir Directories="$(UiRoot)$(UiBuildOutput)" />
+	</Target>
+
+</Project>

@@ -1,0 +1,58 @@
+@use './../../styles/colors' as c;
+
+.ConnectionSettings {
+    padding: 25px;
+    color: c.$input-font-color;
+    
+    .actionButtons {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+
+    .p-tabview-panels {
+        font-family: "Roboto";
+    }
+    .tabview {
+        a {
+            font-family: 'Roboto';
+        }
+
+        .p-tabview-ink-bar { 
+            background-color: c.$theme-color;
+        }
+
+        .p-tabview-nav-container {
+            margin-bottom: 20px;
+        }
+
+        .p-highlight {
+            .p-tabview-title {
+                color: c.$theme-color;
+            }
+
+            .p-tabview-nav-link {
+                border-bottom: none;
+            }
+           
+        }
+
+        .p-tabview-nav-link {
+            padding: 10px 20px;
+            font-weight: normal;
+            // border-bottom-width: 1px;
+            
+            // border: none;
+        }
+        // .p-unselectable-text {
+
+        //     a span {
+        //         text-decoration: none !important;
+        //     }
+
+        //     a {
+        //         text-decoration: none !important;
+        //     }
+        // }
+    }
+}

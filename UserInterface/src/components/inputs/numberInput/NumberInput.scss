@@ -1,0 +1,47 @@
+@use './../../../styles/colors' as c;
+
+.NumberInput {
+
+    max-width: 30vw;
+    width: 100%;
+
+    .p-inputnumber {
+        width: 100% !important;
+    }
+
+    .p-inputnumber-input, .p-inputtext {
+        border-radius: 0 !important;
+        padding: 10px 15px;
+        border: 1px solid c.$border-color;
+
+        &:hover {
+            border: 1px solid c.$border-color;
+        }
+    }
+
+    // .&:hover {
+    //             background-color: c.$light-theme-color;
+    //         }
+    
+
+    .p-inputtext:enabled:focus {
+
+        outline: 0 none;
+        outline-offset: 0;
+        box-shadow: none;
+        border: 1px solid c.$theme-color;
+    }
+
+
+    .p-inputnumber-button {
+
+        background-color: c.$theme-color; 
+        border-radius: 0;
+        border: none;
+
+        &:hover {
+            background-color: c.$light-theme-color;
+        } 
+    }
+    
+}

@@ -1,0 +1,44 @@
+import React from 'react'
+import { BreadCrumb } from 'primereact/breadcrumb';
+import { ITableNode } from '../../../interfaces/ITableNode';
+import { Row } from '@tanstack/react-table';
+import { MenuItem, MenuItemOptions } from 'primereact/menuitem';
+
+const breadcrumbItem = (item: MenuItem, options: MenuItemOptions) => {
+    return (
+        <div className={options.className}>
+            {item.label}
+        </div>
+    )
+}
+
+const WorkspaceBreadCrumbs = ({ clickedRow }: { clickedRow?: Row<ITableNode>}) => {
+
+    let breakcrumbsItems: MenuItem[] = [];
+
+    if(clickedRow) {
+        const currentRowItem: MenuItem = {
+            label: clickedRow.original.paramName,
+            template: breadcrumbItem
+        };
+        const parentRows = clickedRow.getParentRows();
+    
+        breakcrumbsItems = parentRows.map((parentRow) => {
+            const item: MenuItem = {
+                label: parentRow.original.paramName,
+                template: breadcrumbItem
+            }
+            return item;
+        });
+
+        breakcrumbsItems.push(currentRowItem);
+    }
+
+    return (
+        <div>
+            <BreadCrumb model={breakcrumbsItems} />
+        </div>
+    )
+}
+
+export default WorkspaceBreadCrumbs

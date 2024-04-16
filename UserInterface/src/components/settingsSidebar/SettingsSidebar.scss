@@ -1,0 +1,7 @@
+@use './../../styles/colors' as c;
+
+.SettingsSidebar {
+    border-right: 2px solid c.$border-color;
+    padding-top: 20px;
+    height: 100%;
+}

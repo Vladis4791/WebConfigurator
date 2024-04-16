@@ -1,0 +1,75 @@
+@use './../../styles/colors' as c;
+
+.FileObserver {
+    width: 60vw;
+    max-width: 900px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+
+    .container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+    .menu {
+        margin-top: 15px;
+
+        .menu-wrapper {
+            display: flex;
+            
+            .backForwardButtons {
+                display: flex;
+                align-items: center;
+                margin-right: 20px;
+            }
+
+            .pathViewer {
+                flex-grow: 1;
+                border-radius: 5px;
+                border: 1px solid c.$border-color;
+                padding: 10px 15px;
+            }
+        }    
+    }
+
+    .fileObserverWorkspace {
+        flex-grow: 1;
+
+        .fileObserverWorkspaceWrapper {
+            display: flex;  
+
+            .sidebar {
+                width: 30%;
+                border-right: 2px solid c.$border-color;
+            }
+    
+            .content {
+                flex-grow: 1;
+                height: 50vh;
+                padding: 15px;
+                overflow-y: auto;
+            }
+        }
+    }
+
+    .actionButtons {
+        margin: 20px 0;
+
+        display: flex;
+        justify-content: flex-end;
+
+
+        .cancelButton {
+            background-color: c.$border-color;
+            margin-right: 20px;
+        }
+
+        .submitButton {
+            background-color: c.$theme-color;
+        }
+    }
+
+}
+
+

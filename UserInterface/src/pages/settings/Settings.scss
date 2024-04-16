@@ -1,0 +1,26 @@
+@use './../../styles/colors' as c;
+@use './../../styles/mixins' as m;
+
+.Settings {
+    max-width: 1200px;
+    width: 90vw;
+    height: 80vh;
+
+    .container {
+        @include m.container;
+    }
+
+    .settings-content {
+        display: flex;
+        height: 80vh;
+        
+        .sidebar {
+            width: 30%; 
+            flex-shrink: 0;
+        }
+
+        .currentSettings {
+            flex-grow: 1;
+        }
+    }
+}

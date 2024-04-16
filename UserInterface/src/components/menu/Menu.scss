@@ -1,0 +1,21 @@
+@use "../../styles/mixins" as m;
+
+.container {
+    @include m.container;
+}
+
+.Menu {
+    background: #EBEBEB;
+    padding: 0 30px;
+    display: flex;
+
+    .menuItem {
+        padding: 12px 15px;
+        transition: all .2s;
+        cursor: pointer;
+
+        &:hover {
+            background-color: darken($color: #EBEBEB, $amount: 10);
+        }
+    }
+}

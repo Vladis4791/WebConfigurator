@@ -1,0 +1,12 @@
+@mixin container {
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1024px;
+}
+
+@mixin headerStyle {
+    font-weight: normal;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 50px;
+}

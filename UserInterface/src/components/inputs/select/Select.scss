@@ -1,0 +1,30 @@
+@use './../../../styles/colors' as c;
+
+.Select {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: 1px solid c.$border-color;  
+    border-radius: 0;
+    width: 25vw;
+    overflow:hidden;
+    font-family: 'Roboto';
+
+    &:not(.p-disabled).p-focus {
+        box-shadow: none !important;
+    }
+
+    .p-dropdown-trigger {
+        justify-content: right;
+    }
+}
+
+.p-dropdown-item {
+    width: 25vw;
+    text-wrap: wrap;
+    padding: 10px;
+    font-family: 'Roboto';
+
+    &.p-highlight {
+        background: #e5e7eb;
+    }
+}

@@ -1,0 +1,30 @@
+@use "../../styles/mixins" as m;
+
+.container {
+    @include m.container;
+}
+
+.HomePage {
+
+    .wrapper {
+        height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .homePageContent {
+        width: 80vw;
+        height: 50vh;
+    }
+
+    h1 {
+        @include m.headerStyle;
+    }
+
+    .actionButtons {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        column-gap: 30px;
+    }
+}

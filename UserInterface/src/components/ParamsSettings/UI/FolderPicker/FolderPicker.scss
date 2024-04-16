@@ -1,0 +1,21 @@
+@use '../../../../styles/colors' as c;
+
+.FolderPicker {
+
+
+    .content {
+        display: flex;
+    }
+
+    .pathBlock {
+        border: 1px solid c.$border-color;
+        padding: 10px 15px;
+        flex-grow: 1;
+    }
+
+    .selectButton {
+        margin-left: 20px;
+        width: 100px;
+        background-color: c.$theme-color;
+    }
+}

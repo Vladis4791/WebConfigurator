@@ -1,0 +1,10 @@
+@use './../../styles/colors' as c;
+
+.Button {
+    padding: 15px 20px;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    display: block;
+    cursor: pointer;
+}
