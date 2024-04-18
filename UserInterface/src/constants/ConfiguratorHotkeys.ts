@@ -1,0 +1,10 @@
+export const SAVE_DB_FILE_HOTKEY = "ctrl+s";
+export const CREATE_DB_FILE_HOTKEY = "ctrl+shift+n";
+export const OPEN_DB_FILE_HOTKEY = "ctrl+o";
+export const WRITE_UNDEFINED_PARAM_HOTKEY = "ctrl+n";
+export const SAVE_AS_DB_FILE_HOTKEY = "ctrl+shift+s";
+export const PRINT_DB_FILE_HOTKEY = "ctrl+p";
+export const READ_FROM_DEVICE_HOTKEY= "ctrl+d";
+export const WRITE_UPDATED_PART_OF_DB_IN_DEVICE_HOTKEY = "ctrl+u";
+export const WRITE_FULL_DB_IN_DEVICE_HOTKEY = "ctrl+shift+u";
+export const EXIT_APP_HOTKEY = "alt+x";

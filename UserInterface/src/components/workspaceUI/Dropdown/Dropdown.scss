@@ -1,14 +1,14 @@
 .Dropdown {
-    position: fixed;    
-    z-index: 1000;
-    width: 300px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 70%);
+	position: fixed;
+	background-color: #EEEDED;
+	z-index: 1000;
+	box-shadow: 2px 2px 4px rgba(0, 0, 0, 70%);
 
-    &.open {
-        display: block;
-    }
+	&.open {
+		display: block;
+	}
 
-    &.close {
-        display: none;
-    }
+	&.close {
+		display: none;
+	}
 }

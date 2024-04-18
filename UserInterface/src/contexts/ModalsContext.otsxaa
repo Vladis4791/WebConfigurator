@@ -1,0 +1,41 @@
+// import React, { ReactNode, useContext, useEffect, useState } from 'react';
+// import { settingsAPI } from '../APIs/settings.api';
+// import { SettingsProperties } from '../interfaces/SettingsProperties';
+
+// interface ModalsContextValue {
+//     isSomeModalOpen: SettingsProperties,
+//     setIsSomeModalOpen: React.Dispatch<React.SetStateAction<boolean>>
+// }
+
+// const SettingsContext = React.createContext<ModalsContextValue | undefined>(undefined);
+
+// const ModalsProvider = ({ children }: { children: ReactNode }): JSX.Element => {
+    
+//     const [isSomeModalOpen, setIsSomeModalOpen] = useState(false);
+
+
+    
+//     return (
+//         <SettingsContext.Provider value={{
+//             // isSomeModalOpen,
+//             isSomeModalOpen: true,
+//             setIsSomeModalOpen
+//         }}>
+//             { children }
+//         </SettingsContext.Provider>
+//     );
+// }
+
+// export const useSettings = (): ModalsContextValue => {
+
+//     const context = useContext(SettingsContext);
+//     if (!context) {
+//         throw new Error('useSettings can only be used inside SettingsProvider');
+//     }
+
+//     return context;
+
+// }
+
+
+// export default ModalsProvider;

@@ -1,39 +1,39 @@
+@use './../../../../styles/colors' as c;
+
 .DropdownItem {
+	transition: background-color 0.3s;
+	border: none;
+	outline: none;
+	width: 100%;
+	font-family: "Roboto";
+	background-color: inherit;
+	padding: 10px 15px 10px 10px;
+	display: grid;
+	cursor: pointer;
+	grid-template-columns: 30px 1fr 150px;
+	align-items: center;
+	column-gap: 15px;
 
-    transition: background-color .3s;
-    border: none;
-    outline: none;
-    width: 100%;
-    padding: 15px 20px;
-    font-family: 'Roboto';
-    background-color: #EEEDED;
-    display: flex;
-    cursor: pointer;
-
-    .icon {
-        width: 50px;
+    &.underlined {
+        border-bottom: 1px solid c.$border-color;
     }
 
-    .label {
-        flex-grow: 1;
-    }
+	.label {
+		text-align: left;
+	}
 
-    .hotkey {
-        width: 100px;
-    }
+	.hotkey {
+		text-align: right;
+	}
 
-    &:disabled {
-        .label { 
-            color: red;
-        }
+	&:disabled {
+		&:hover {
+			background-color: #eeeded;
+			cursor: default;
+		}
+	}
 
-        &:hover {
-            background-color: #EEEDED;
-            cursor: default;
-        }
-    }
-
-    &:hover {
-        background-color: #DFDEDE;
-    }
+	&:hover {
+		background-color: #dfdede;
+	}
 }
