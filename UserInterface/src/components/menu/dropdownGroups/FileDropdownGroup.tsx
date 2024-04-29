@@ -6,8 +6,21 @@ import { DropdownGroup } from "../../workspaceUI/Dropdown/Dropdown";
 import { useLocation, useNavigate } from "react-router-dom";
 import FileObserver from "../../fileObserver/FileObserver";
 import { FileObserverType } from "../../../interfaces/FileObserver";
-import { MODAL_NAME_CREATE_DB, MODAL_NAME_OPEN_DB } from "../../../constants/Global";
-import { CREATE_DB_FILE_HOTKEY, OPEN_DB_FILE_HOTKEY, PRINT_DB_FILE_HOTKEY, READ_FROM_DEVICE_HOTKEY, SAVE_DB_FILE_HOTKEY, WRITE_FULL_DB_IN_DEVICE_HOTKEY, WRITE_UPDATED_PART_OF_DB_IN_DEVICE_HOTKEY } from "../../../constants/ConfiguratorHotkeys";
+import {
+	MODAL_NAME_CREATE_DB,
+	MODAL_NAME_OPEN_DB,
+	MODAL_NAME_SAVE_AS,
+} from "../../../constants/Global";
+import {
+	CREATE_DB_FILE_HOTKEY,
+	OPEN_DB_FILE_HOTKEY,
+	PRINT_DB_FILE_HOTKEY,
+	READ_FROM_DEVICE_HOTKEY,
+	SAVE_AS_DB_FILE_HOTKEY,
+	SAVE_DB_FILE_HOTKEY,
+	WRITE_FULL_DB_IN_DEVICE_HOTKEY,
+	WRITE_UPDATED_PART_OF_DB_IN_DEVICE_HOTKEY,
+} from "../../../constants/ConfiguratorHotkeys";
 import Icon from "../../icon/Icon";
 import print_image from "./../../../assets/images/print.svg";
 import print_disabled_image from "./../../../assets/images/print_disabled.svg";
@@ -18,6 +31,8 @@ import save_image from "./../../../assets/images/save.svg";
 import save_disabled_image from "./../../../assets/images/save_disabled.svg";
 import open_file_image from "./../../../assets/images/file_open.svg";
 import create_file_image from "./../../../assets/images/new_file.svg";
+import { workspaceToolsService } from "../../../services/WorkspaceToolsService";
+import { useWorkspace } from "../../../contexts/WorkspaceContext";
 
 const FileDropdownGroup = ({ closeDropdown }: DropdownGroup) => {
 	const location = useLocation();
@@ -26,6 +41,10 @@ const FileDropdownGroup = ({ closeDropdown }: DropdownGroup) => {
 	const isHomePage = () => {
 		return location.pathname === "/";
 	};
+
+	const { saveFile, saveFileAs, filePathToSave } = useWorkspace();
+
+ 
 	return (
 		<>
 			<ButtonWithModal
@@ -55,29 +74,95 @@ const FileDropdownGroup = ({ closeDropdown }: DropdownGroup) => {
 				renderModalContent={(props) => (
 					<FileObserver
 						{...props}
-						onSubmit={(path) => navigate('/workspace/new', {
-							state: {
-								filePath: path
-							}
-						})}
+						onSubmit={(path) =>
+							navigate("/workspace/saved", {
+								state: {
+									filePath: path,
+								},
+							})
+						}
 						fileObserverType={FileObserverType.OPEN_FILE}
 					/>
 				)}
 			/>
+			{filePathToSave ? (
+				<DropdownItem
+					disabled={isHomePage()}
+					label="Сохранить"
+					icon={
+						<Icon
+							url={
+								isHomePage() ? save_disabled_image : save_image
+							}
+						/>
+					}
+					onClick={saveFile}
+					hotkey={SAVE_DB_FILE_HOTKEY}
+					closeDropdown={closeDropdown}
+				/>
+			) : (
+				<ButtonWithModal
+					renderButton={(props) => (
+						<DropdownItem
+							{...props}
+							label="Сохранить"
+							disabled={isHomePage()}
+							icon={
+								<Icon
+									url={
+										isHomePage()
+											? save_disabled_image
+											: save_image
+									}
+								/>
+							}
+							closeDropdown={closeDropdown}
+							hotkey={SAVE_AS_DB_FILE_HOTKEY}
+							last
+						/>
+					)}
+					modalName={MODAL_NAME_SAVE_AS}
+					renderModalContent={(props) => (
+						<FileObserver
+							{...props}
+							onSubmit={(path) => saveFileAs(path)}
+							fileObserverType={FileObserverType.SAVE_AS_FILE}
+						/>
+					)}
+				/>
+			)}
 
-			<DropdownItem
-				disabled={isHomePage()}
-				label="Сохранить"
-				icon={<Icon url={isHomePage() ? save_disabled_image : save_image} />}
-				hotkey={SAVE_DB_FILE_HOTKEY}
-				closeDropdown={closeDropdown}
+
+			<ButtonWithModal
+				renderButton={(props) => (
+					<DropdownItem
+						{...props}
+						label="Сохранить как"
+						disabled={isHomePage()}
+						icon={
+							<Icon
+								url={
+									isHomePage()
+										? save_disabled_image
+										: save_image
+								}
+							/>
+						}
+						closeDropdown={closeDropdown}
+						hotkey={SAVE_AS_DB_FILE_HOTKEY}
+						last
+					/>
+				)}
+				modalName={MODAL_NAME_SAVE_AS}
+				renderModalContent={(props) => (
+					<FileObserver
+						{...props}
+						onSubmit={(path) => saveFileAs(path)}
+						fileObserverType={FileObserverType.SAVE_AS_FILE}
+					/>
+				)}
 			/>
-			<DropdownItem
-				disabled={isHomePage()}
-				label="Сохранить как..."
-				closeDropdown={closeDropdown}
-				last
-			/>
+
 			<DropdownItem
 				label="Считать с прибора"
 				closeDropdown={closeDropdown}
@@ -89,7 +174,13 @@ const FileDropdownGroup = ({ closeDropdown }: DropdownGroup) => {
 				label="Загрузить обновленную часть БД в прибор"
 				hotkey={WRITE_UPDATED_PART_OF_DB_IN_DEVICE_HOTKEY}
 				closeDropdown={closeDropdown}
-				icon={<Icon url={isHomePage() ? upload_disabled_image : upload_image } />}
+				icon={
+					<Icon
+						url={
+							isHomePage() ? upload_disabled_image : upload_image
+						}
+					/>
+				}
 			/>
 			<DropdownItem
 				disabled={isHomePage()}
@@ -101,7 +192,11 @@ const FileDropdownGroup = ({ closeDropdown }: DropdownGroup) => {
 			<DropdownItem
 				label="Печать"
 				hotkey={PRINT_DB_FILE_HOTKEY}
-				icon={<Icon url={isHomePage() ? print_disabled_image : print_image } />}
+				icon={
+					<Icon
+						url={isHomePage() ? print_disabled_image : print_image}
+					/>
+				}
 				closeDropdown={closeDropdown}
 				disabled={isHomePage()}
 				last

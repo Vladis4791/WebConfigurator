@@ -4,9 +4,9 @@ import { tableService } from "./TableService";
 
 class WorkspaceToolsService {
 
-    public saveDeviceToFile(tableNodes: ITableNode[], fileName: string) {
+    public saveDeviceToFile(tableNodes: ITableNode[], path: string) {
         const data = tableService.getTagsInfoFromTableData(tableNodes);
-        return workspaceAPI.saveDeviceToFile(data, fileName);
+        return workspaceAPI.saveDeviceToFile(data, path);
     }
 
 }

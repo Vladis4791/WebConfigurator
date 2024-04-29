@@ -3,10 +3,11 @@ import { BreadCrumb } from 'primereact/breadcrumb';
 import { ITableNode } from '../../../interfaces/ITableNode';
 import { Row } from '@tanstack/react-table';
 import { MenuItem, MenuItemOptions } from 'primereact/menuitem';
+import './WorkspaceBreadCrumbs.scss';
 
 const breadcrumbItem = (item: MenuItem, options: MenuItemOptions) => {
     return (
-        <div className={options.className}>
+        <div className={options.className} style={{marginRight: "10px", marginLeft: "10px", "fontSize": "inherit"}}>
             {item.label}
         </div>
     )
@@ -36,7 +37,7 @@ const WorkspaceBreadCrumbs = ({ clickedRow }: { clickedRow?: Row<ITableNode>}) =
 
     return (
         <div>
-            <BreadCrumb model={breakcrumbsItems} />
+            <BreadCrumb model={breakcrumbsItems} className="WorkspaceBreadcrumbs" />
         </div>
     )
 }

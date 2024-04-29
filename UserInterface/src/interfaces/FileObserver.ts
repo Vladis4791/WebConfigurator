@@ -4,8 +4,10 @@ export interface DirectoryEntries {
 }
 
 export enum FileObserverType {
-    SELECT_DIRECTORY,
-    OPEN_FILE
+    SELECT_DIRECTORY = "Выбрать папку",
+    OPEN_FILE = "Открыть",
+    SAVE_FILE = "Сохранить",
+    SAVE_AS_FILE = "Сохранить как"
 }
 
 export enum FileSystemEntry {

@@ -16,6 +16,7 @@ import { FileObserverType } from '../../interfaces/FileObserver';
 import DeviceSelectPage from '../deviceSelect/DeviceSelectPage';
 import Settings from '../settings/Settings';
 import { MODAL_NAME_CREATE_DB, MODAL_NAME_OPEN_DB, MODAL_NAME_SETTINGS } from '../../constants/Global';
+import { CREATE_DB_FILE_HOTKEY } from '../../constants/ConfiguratorHotkeys';
 
 const HomePage = () => {
 
@@ -63,7 +64,7 @@ const HomePage = () => {
 								renderModalContent={(props) => 
 									<FileObserver 
 										{...props}
-										onSubmit={(path) => navigate('/workspace', {
+										onSubmit={(path) => navigate('/workspace/saved', {
 											state: {
 												filePath: path
 											}

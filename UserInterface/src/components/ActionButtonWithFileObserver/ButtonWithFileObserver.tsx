@@ -14,7 +14,7 @@ const ActionButtonWithFileObserver = (props: Omit<ActionButtonParams, 'onClick'>
 			<ActionButton {...props} onClick={() => setIsOpen(true)} />
 			<FileObserver 	
 				onClose={() => setIsOpen(false)}
-				onSubmit={(path) => navigate('/workspace', {
+				onSubmit={(path) => navigate('/workspace/saved', {
 					state: {
 						filePath: path
 					}

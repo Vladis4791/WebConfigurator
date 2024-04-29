@@ -5,6 +5,8 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import SettingsProvider from "./contexts/SettingsContext";
+import ModalsProvider from "./contexts/ModalsContext";
+import WorkspaceProvider from "./contexts/WorkspaceContext";
 
 const root = ReactDOM.createRoot(
     document.getElementById("root") as HTMLElement
@@ -13,7 +15,11 @@ root.render(
     <React.StrictMode>
         <BrowserRouter>
             <SettingsProvider>
-                <App />
+                <ModalsProvider>
+                    <WorkspaceProvider>
+                        <App/>
+                    </WorkspaceProvider>
+                </ModalsProvider>
             </SettingsProvider>
         </BrowserRouter>
     </React.StrictMode>

@@ -2,10 +2,10 @@ import { TagInfo } from "../interfaces/ITableNode";
 import { server } from "./server";
 
 class WorkspaceAPI {
-    public saveDeviceToFile(tagsInfo: TagInfo[], fileName: string) {
+    public saveDeviceToFile(tagsInfo: TagInfo[], filePath: string) {
         return server.action('/saveDevice', {
             TagsInfo: tagsInfo,
-            FileName: fileName
+            FilePath: filePath
         });
     }
 

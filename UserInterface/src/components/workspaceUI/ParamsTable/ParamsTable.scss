@@ -1,5 +1,35 @@
+@use './../../../styles/colors' as c;
+
+
 .ParamsTable {
+
+    position: relative;
+
+    
+
     th {
         width: 300px;
+    }
+
+    .container {
+        width: 90vw;
+        max-width: 1920px;
+        margin: 0 auto;
+    }
+
+    .paramTableRepresentation {
+        margin-top: 50px;
+
+        border: 1px solid c.$border-color;
+        border-collapse: collapse;
+
+        td, th {
+            border-top: 1px solid c.$border-color;
+            padding: 10px;
+        }
+
+        tr:hover {
+            background-color: c.$selection-color;
+        }
     }
 }

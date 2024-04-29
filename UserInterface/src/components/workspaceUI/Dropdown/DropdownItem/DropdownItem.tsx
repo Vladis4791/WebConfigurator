@@ -1,6 +1,7 @@
 import React, { ButtonHTMLAttributes } from "react";
 import "./DropdownItem.scss";
 import { useHotkeys } from "react-hotkeys-hook";
+import { useModal } from "../../../../contexts/ModalsContext";
 
 interface DropdownItemProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	label: string;
@@ -29,7 +30,6 @@ const DropdownItem = ({
 		const isButtonDisabled = props.disabled ?? false;
 
 		if (hotkey && !isButtonDisabled) {
-			console.log("action");
 			handleClick(null);
 		}
 	});

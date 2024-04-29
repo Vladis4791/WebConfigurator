@@ -7,6 +7,7 @@ using HelloPhotino.React;
 using Newtonsoft.Json.Linq;
 using System.util;
 using HelloPhotino.React.Properties;
+using System.Runtime.InteropServices;
 
 
 namespace HelloPhotino.CustomServer
@@ -57,6 +58,7 @@ namespace HelloPhotino.CustomServer
         static private AppSettings appSettings = new AppSettings();
         //static private Properties.Settings a = appSettings.GetSettings();
         static private Photino.HelloPhotino.React.ConfiguratorInstance ci = new Photino.HelloPhotino.React.ConfiguratorInstance(currentDevice);
+        static private FileSystem fileSystem = new FileSystem();
 
         private static CancellationTokenSource cts;
         private static CancellationToken token;
@@ -106,10 +108,14 @@ namespace HelloPhotino.CustomServer
                     break;
                 case "/getDirectoryEntries":
                     string directoryPath = requestParams.Params.ToString()!;
-                    response.Data = GetDirectoryEntriesByDirPath(directoryPath);
+                    response.Data = fileSystem.GetDirectoryEntriesByDirPath(directoryPath);
                     break;
                 case "/readDataFromDevice":
                     GetDataFromDevice();
+                    break;
+                case "/rootDirectories":
+                    response.Data = fileSystem.GetRootDirectoriesNames();
+
                     break;
                 case "/getChangableSelectOptions":
                     response.Data = appSettings.GetChangableOptions();
@@ -201,6 +207,10 @@ namespace HelloPhotino.CustomServer
                 case "/printParams": 
                     object someParams = JsonConvert.DeserializeObject<SaveDeviceParams>(actionParams);  
                     break;
+                case "/createNewFile":
+                    string newFilePath = actionParams!;
+                    fileSystem.CreateNewFile(newFilePath);
+                    break;
                 default:
                     break;
             }
@@ -210,25 +220,5 @@ namespace HelloPhotino.CustomServer
             window.SendWebMessage(response_to_send);
         }
 
-        private DirectoryEntries GetDirectoryEntriesByDirPath(string dirPath)
-        {
-            string[] filesNames = Directory.EnumerateFiles(dirPath, "*.xdb", new EnumerationOptions
-            {
-                IgnoreInaccessible = true,
-                RecurseSubdirectories = false
-            }).Select((string filePath) => Path.GetFileName(filePath)).ToArray();
-            string[] subdirectoriesNames = Directory.EnumerateDirectories(dirPath, "*", new EnumerationOptions
-            {
-                IgnoreInaccessible = true,
-                RecurseSubdirectories = false
-            }).Select((string subdirectoryPath) => Path.GetFileName(subdirectoryPath)).ToArray();
-
-            return new DirectoryEntries(filesNames, subdirectoriesNames);
-        }
-    
-        private void SaveFile()
-        {
-
-        } 
     }
 }

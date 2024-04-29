@@ -28,7 +28,7 @@ const DeviceSelectPage = ({ onClose }: ModalContent) => {
 
 	const handleClick = () => {
 		onClose();
-		navigate("/workspace", { state: { deviceName: selectedDevice } });
+		navigate("/workspace/new", { state: { deviceName: selectedDevice } });
 	}
 
 	return (

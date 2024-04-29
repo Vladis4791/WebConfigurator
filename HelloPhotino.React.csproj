@@ -23,6 +23,7 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Photino.NET" Version="2.3.0" />
 		<PackageReference Include="Photino.NET.Server" Version="1.0.0" />
+		<PackageReference Include="ReactiveUI" Version="19.6.1" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
 		<PackageReference Include="System.IO.Ports" Version="8.0.0" />
 		<PackageReference Include="System.Management" Version="8.0.0" />

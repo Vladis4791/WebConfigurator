@@ -1,16 +1,13 @@
 import React from "react";
 import "./ToolMenu.scss";
 import ToolMenuButton from "./ToolMenuButton/ToolMenuButton";
-import openFile from "./../../../assets/images/file_open.svg";
-import createFile from "./../../../assets/images/new_file.svg";
-import saveFile from "./../../../assets/images/save.svg";
+import open_file_image from "./../../../assets/images/file_open.svg";
+import create_file_image from "./../../../assets/images/new_file.svg";
+import save_file_image from "./../../../assets/images/save.svg";
 import print from "./../../../assets/images/print.svg";
 import download from "./../../../assets/images/download.svg";
 import upload from "./../../../assets/images/upload.svg";
-import DropdownItem from "../Dropdown/DropdownItem/DropdownItem";
 import { useWorkspace } from "../../../contexts/WorkspaceContext";
-import { tableService } from "../../../services/TableService";
-import { workspaceAPI } from "../../../APIs/workspace.api";
 import ZoomButtons from "./ZoomButtons/ZoomButtons";
 import ButtonWithDropdown from "../ButtonWithDropdown/ButtonWithDropdown";
 import Dropdown from "../Dropdown/Dropdown";
@@ -21,51 +18,85 @@ import UploadDropdownGroup from "./DropdownGroups/UploadDropdownGroup";
 import ButtonWithModal from "../../ButtonWithModal/ButtonWithModal";
 import FileObserver from "../../fileObserver/FileObserver";
 import { FileObserverType } from "../../../interfaces/FileObserver";
-import { MODAL_NAME_CREATE_DB } from "../../../constants/Global";
+import {
+	MODAL_NAME_CREATE_DB,
+	MODAL_NAME_SAVE_AS,
+} from "../../../constants/Global";
 import { useNavigate } from "react-router-dom";
 import DeviceSelectPage from "../../../pages/deviceSelect/DeviceSelectPage";
 import { connectionAPI } from "../../../APIs/connections.api";
 
 const ToolMenu = () => {
-
 	const navigate = useNavigate();
 
-	const { tableNodes, setTableNodes } = useWorkspace();
+	const {
+		tableNodes,
+		setTableNodes,
+		filePathToSave,
+		setFilePathToSave,
+		saveFileAs,
+		saveFile,
+	} = useWorkspace();
 
-	const onSaveDB = () => {
-		workspaceAPI.saveDeviceToFile(tableNodes, "db").then(() => {
-			setTableNodes(
-				tableService.getTableNodesWithUneditedNodes(tableNodes)
-			);
-		});
-	};
+	// const saveDB = (filePath: string) => {
+	// 	const data = tableService.getTagsInfoFromTableData(tableNodes);
+	// 	workspaceAPI.saveDeviceToFile(data, filePath).then(() => {
+			// setTableNodes(
+			// 	tableService.getTableNodesWithUneditedNodes(tableNodes)
+			// );
+	// 	});
+	// };
+
+	// const onSaveAsModalSubmit = (path: string) => {
+	// 	setFilePathToSave(path);
+	// 	saveDB(path);
+	// }
 
 	return (
 		<div className="ToolMenu">
 			<ButtonWithModal
-				renderButton={(props) => (<ToolMenuButton {...props} imageURL={createFile}  />)}
+				renderButton={(props) => (
+					<ToolMenuButton {...props} imageURL={create_file_image} />
+				)}
 				modalName={MODAL_NAME_CREATE_DB}
 				renderModalContent={(props) => <DeviceSelectPage {...props} />}
 			/>
 			<ButtonWithModal
 				renderButton={(props) => (
-					<ToolMenuButton {...props} imageURL={openFile} />
+					<ToolMenuButton {...props} imageURL={open_file_image} />
 				)}
 				modalName={MODAL_NAME_CREATE_DB}
 				renderModalContent={(props) => (
 					<FileObserver
 						{...props}
-						onSubmit={(path) => navigate('/workspace', {
-							state: {
-								filePath: path
-							}
-						})}
+						onSubmit={(path) =>
+							navigate("/workspace/saved", {
+								state: {
+									filePath: path,
+								},
+							})
+						}
 						fileObserverType={FileObserverType.OPEN_FILE}
 					/>
 				)}
-			/>		
-			
-			<ToolMenuButton imageURL={saveFile} onClick={() => onSaveDB()} />
+			/>
+			{filePathToSave ? (
+				<ToolMenuButton imageURL={save_file_image} onClick={saveFile} />
+			) : (
+				<ButtonWithModal
+					renderButton={(props) => (
+						<ToolMenuButton {...props} imageURL={save_file_image} />
+					)}
+					modalName={MODAL_NAME_SAVE_AS}
+					renderModalContent={(props) => (
+						<FileObserver
+							{...props}
+							onSubmit={(path) => saveFileAs(path)}
+							fileObserverType={FileObserverType.SAVE_AS_FILE}
+						/>
+					)}
+				/>
+			)}
 			<ButtonWithDropdown
 				renderButton={(props, ref) => (
 					<IconButton
@@ -75,10 +106,18 @@ const ToolMenu = () => {
 					/>
 				)}
 				renderDropdown={(props) => (
-					<Dropdown {...props} renderDropdownGroup={(props) => <PrintGroup {...props} />} />
+					<Dropdown
+						{...props}
+						renderDropdownGroup={(props) => (
+							<PrintGroup {...props} />
+						)}
+					/>
 				)}
 			/>
-			<ToolMenuButton imageURL={download} onClick={() => connectionAPI.readDataFromDevice()} />
+			<ToolMenuButton
+				imageURL={download}
+				onClick={() => connectionAPI.readDataFromDevice()}
+			/>
 			<ButtonWithDropdown
 				renderButton={(props, ref) => (
 					<IconButton
@@ -88,7 +127,12 @@ const ToolMenu = () => {
 					/>
 				)}
 				renderDropdown={(props) => (
-					<Dropdown {...props} renderDropdownGroup={(props) => <UploadDropdownGroup {...props} />} />
+					<Dropdown
+						{...props}
+						renderDropdownGroup={(props) => (
+							<UploadDropdownGroup {...props} />
+						)}
+					/>
 				)}
 			/>
 			<ZoomButtons />

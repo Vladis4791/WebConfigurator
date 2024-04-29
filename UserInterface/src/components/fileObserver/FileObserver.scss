@@ -57,8 +57,12 @@
         margin: 20px 0;
 
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
 
+
+        .windowButtons {
+            display: flex;
+        }
 
         .cancelButton {
             background-color: c.$border-color;

@@ -36,8 +36,8 @@ const App = () => {
                 <Routes>
                     <Route path='/' element={<HomePage />} />
                     <Route path='workspace' element={<Workspace />}>
-                        {/* <Route path="new" element={<NewDeviceParamTable />} />
-                        <Route path="saved" element={<SavedDeviceParamTable />} /> */}
+                        <Route path="new" element={<NewDeviceParamTable />} />
+                        <Route path="saved" element={<SavedDeviceParamTable />} />
                     </Route>
                     {/* <Route path='waitingDownload' element={<WaitingPage />} />
                     <Route path='waitingUpload' element={<WaitingPage />} />

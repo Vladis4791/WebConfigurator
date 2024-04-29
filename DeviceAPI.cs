@@ -24,7 +24,7 @@ namespace HelloPhotino.React
     public class SaveDeviceParams
     {
         public TagInfo[]? TagsInfo { get; set; }
-        public string? FileName { get; set; }
+        public string? FilePath { get; set; }
     }
 
     internal class DeviceAPI
@@ -159,7 +159,8 @@ namespace HelloPhotino.React
                 currentDevice.isOperativeOfTags, 
                 currentDevice.measurementUnitsOfTags, 
                 currentDevice.tags,
-                string.Format("{0}/{1}.xdb", settings.GetSettings().SavedFolderPath, "db"),
+                string.Format("{0}", saveDeviceParams.FilePath),
+                //string.Format("{0}/{1}.xdb", settings.GetSettings().SavedFolderPath, "db"),
                 "", 
                 "serialNumber", 
                 "id"
