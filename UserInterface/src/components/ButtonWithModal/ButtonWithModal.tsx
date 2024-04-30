@@ -11,7 +11,7 @@ const ButtonWithModal = ({
 		props: React.ButtonHTMLAttributes<HTMLButtonElement>
 	) => React.ReactElement;
 	renderModalContent: (props: ModalContent) => React.ReactElement;
-	modalName: string;
+	modalName?: string;
 }) => {
 
 	const [isOpen, setIsOpen] = useState(false);
@@ -49,14 +49,13 @@ const ButtonWithModal = ({
 	}
 
     const button = renderButton({ onClick: handleButtonClick });
-
 	return (
 		<>
 			{ button }
 			<Modal
 				isOpen={isOpen}
 				onClose={closeModal}
-				modalName={modalName}
+				modalName={modalName ?? button.props.title}
 			>
 				{renderModalContent({ onClose: closeModal })}
 			</Modal>

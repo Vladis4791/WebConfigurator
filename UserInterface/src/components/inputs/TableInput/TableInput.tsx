@@ -22,6 +22,7 @@ const TableInput = (info: CellContext<ITableNode, unknown>) => {
 
 	return (
 		<input
+			style={{margin: "0 auto", display: "block"}}
 			value={value}
 			onChange={e => setValue(e.target.value)}
 			onBlur={onBlur}

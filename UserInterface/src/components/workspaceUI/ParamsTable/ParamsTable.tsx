@@ -1,7 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { DeviceAPI } from "../../../APIs/device.api";
-import { IDevice } from "../../../interfaces/IDeviceParams";
-import { useLocation } from "react-router-dom";
 import "./ParamsTable.scss";
 import {
 	ExpandedState,
@@ -14,6 +11,8 @@ import {
 	flexRender,
 	RowSelectionState,
 	Row,
+	Cell,
+	Header,
 } from "@tanstack/react-table";
 import { useSkipper } from "../../../hooks/useSkipper";
 import TableInput from "../../inputs/TableInput/TableInput";
@@ -24,6 +23,10 @@ import { tableService } from "../../../services/TableService";
 import TableCheckbox from "../../inputs/TableCheckbox/TableCheckbox";
 import HintBlock from "../HintBlock/HintBlock";
 import WorkspaceBreadCrumbs from "../WorkspaceBreadCrumbs/WorkspaceBreadCrumbs";
+import Icon from "../../icon/Icon";
+import unsaved_star_image from "./../../../assets/images/star.svg";
+import ExpandButton from "./ExpandButton/ExpandButton";
+import ParamsTableActionButtons from "./ParamsTableActionButtons/ParamsTableActionButtons";
 
 export interface UpdatedNodeProps extends NodeProps {
 	newValue?: string;
@@ -35,122 +38,120 @@ export interface NodeProps {
 }
 
 const ParamsTable = () => {
+	const { tableNodes, currentDevice, setTableNodes } = useWorkspace();
+
+	const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+
 	const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
 		{}
 	);
 
-	const { tableNodes, currentDevice, setTableNodes } = useWorkspace();
-
-	useEffect(() => {
-		setExpanded({})
-		console.log("currentDevice changed")
-	}, [currentDevice]);
-
-	const columns = React.useMemo<ColumnDef<ITableNode>[]>(
-		() => {
-			const operativeParamIndex = 3;
-
-			const columnsForLogika4: ColumnDef<ITableNode>[] = [
-				{
-					accessorKey: "choose",
-					header: "Выбор",
-					cell: ({ row }) => (
-						<div
-							style={{
-								paddingLeft: `${row.depth * 2}rem`,
-							}}
-						>
-							<>
-								<IndeterminateCheckbox
-									{...{
-										checked: row.getIsSelected(),
-										indeterminate: row.getIsSomeSelected(),
-										onChange: row.getToggleSelectedHandler(),
-									}}
-								/>{" "}
-								{row.getCanExpand() ? (
-									<button
-										{...{
-											onClick: row.getToggleExpandedHandler(),
-											style: { cursor: "pointer" },
-										}}
-									>
-										{row.getIsExpanded() ? "👇" : "👉"}
-									</button>
-								) : (
-									"🔵"
-								)}
-							</>
-						</div>
-					),
-					footer: (props) => props.column.id,
-				},
-				{
-					accessorFn: (row) => row.paramName,
-					id: "param",
-					cell: (info) => info.getValue(),
-					header: () => <span>Параметр</span>,
-					footer: (props) => props.column.id,
-				},
-				{
-					accessorKey: "isEdited",
-					header: "",
-					cell: (info) => {
-						if (info.row.subRows.length === 0) {
-							const isEdited = info.getValue() as boolean;
-							if (isEdited) return "unsaved";
-							return null;
-						}
-	
-						return null;
-					},
-				},
-				{
-					accessorKey: "isOperative",
-					header: "Оперативный",
-					cell: (info) => {
-						return info.row.subRows.length === 0 ? (
-							<TableCheckbox {...info} />
-						) : null;
-					},
-				},
-				{
-					accessorKey: "value",
-					header: () => "Значение",
-					cell: (info) => {
-						return info.row.subRows.length === 0 ? (
-							<TableInput {...info} />
-						) : null;
-					},
-					footer: (props) => props.column.id,
-				},
-				{
-					accessorKey: "measurementUnits",
-					header: () => <span>Единицы</span>,
-					cell: (props) => props.getValue(),
-					footer: (props) => props.column.id,
-				},
-				{
-					accessorKey: "description",
-					header: "Описание",
-					cell: (props) => props.getValue(),
-					footer: (props) => props.column.id,
-				},
-			];
-
-			if(currentDevice.DeviceType === "Logika6") {
-				const columnsForLogika6 = columnsForLogika4.filter((column, idx) => idx !== operativeParamIndex);
-				return columnsForLogika6;
-			}
-
-			return columnsForLogika4;
-		},
-		[currentDevice]
-	);
-
 	const [expanded, setExpanded] = useState<ExpandedState>({});
 
-	const [autoResetPageIndex, skipAutoResetPageIndex] = useSkipper();
+	const [clickedRow, setClickedRow] = useState<Row<ITableNode> | undefined>(
+		undefined
+	);
+
+	const columns = React.useMemo<ColumnDef<ITableNode>[]>(() => {
+		const operativeParamIndex = 3;
+
+		const columnsForLogika4: ColumnDef<ITableNode>[] = [
+			{
+				accessorKey: "choose",
+				header: "Выбор",
+				cell: ({ row }) => (
+					<div
+						style={{
+							paddingLeft: `${row.depth * 2}rem`,
+							display: "flex",
+							alignItems: "center",
+						}}
+					>
+						<>
+							<IndeterminateCheckbox
+								{...{
+									checked: row.getIsSelected(),
+									indeterminate: row.getIsSomeSelected(),
+									onChange: row.getToggleSelectedHandler(),
+								}}
+							/>{" "}
+							{row.getCanExpand() ? (
+								<ExpandButton row={row} />
+							) : (
+								""
+							)}
+						</>
+					</div>
+				),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorFn: (row) => row.paramName,
+				id: "param",
+				cell: (info) => info.getValue(),
+				header: () => <span>Параметр</span>,
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: "isEdited",
+				header: "",
+				cell: (info) => {
+					if (info.row.subRows.length === 0) {
+						const isEdited = info.getValue() as boolean;
+						if (isEdited)
+							return (
+								<div style={{ width: "30px", height: "30px" }}>
+									<Icon url={unsaved_star_image} />
+								</div>
+							);
+						return null;
+					}
+
+					return null;
+				},
+			},
+			{
+				accessorKey: "isOperative",
+				header: "Оперативный",
+				cell: (info) => {
+					return info.row.subRows.length === 0 ? (
+						<TableCheckbox {...info} />
+					) : null;
+				},
+			},
+			{
+				accessorKey: "value",
+				header: () => "Значение",
+				cell: (info) => {
+					return info.row.subRows.length === 0 ? (
+						<TableInput {...info} />
+					) : null;
+				},
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: "measurementUnits",
+				header: () => <span>Единицы</span>,
+				cell: (props) => props.getValue(),
+				footer: (props) => props.column.id,
+			},
+			{
+				accessorKey: "description",
+				header: "Описание",
+				cell: (props) => props.getValue(),
+				footer: (props) => props.column.id,
+			},
+		];
+
+		if (currentDevice.DeviceType === "Logika6") {
+			const columnsForLogika6 = columnsForLogika4.filter(
+				(column, idx) => idx !== operativeParamIndex
+			);
+			return columnsForLogika6;
+		}
+
+		return columnsForLogika4;
+	}, [currentDevice]);
 
 	const table = useReactTable({
 		data: tableNodes,
@@ -158,6 +159,11 @@ const ParamsTable = () => {
 		state: {
 			expanded,
 			rowSelection,
+		},
+		initialState: {
+			pagination: {
+				pageSize: 20
+			}
 		},
 		enableRowSelection: true,
 		onRowSelectionChange: setRowSelection,
@@ -182,140 +188,85 @@ const ParamsTable = () => {
 		debugTable: true,
 	});
 
-	const [clickedRow, setClickedRow] = useState<Row<ITableNode> | undefined>(
-		undefined
-	);
+
+	useEffect(() => {
+		setExpanded({});
+	}, [currentDevice]);
+
+	const getClassNameByCell = (cell: Cell<ITableNode, unknown>) => {
+		const columnIdAndColumnName = cell.id.split("_");
+		const columnName = columnIdAndColumnName[1];
+		return columnName;
+	};
 
 	return (
 		<div className="ParamsTable">
 			<div className="container">
-				<WorkspaceBreadCrumbs clickedRow={clickedRow} />
-				<table className="paramTableRepresentation">
-					<thead>
-						{table.getHeaderGroups().map((headerGroup) => (
-							<tr key={headerGroup.id}>
-								{headerGroup.headers.map((header) => {
-									return (
-										<th
-											key={header.id}
-											colSpan={header.colSpan}
-										>
-											{header.isPlaceholder ? null : (
-												<div>
-													{flexRender(
-														header.column.columnDef
-															.header,
-														header.getContext()
-													)}
-												</div>
-											)}
-										</th>
-									);
-								})}
-							</tr>
-						))}
-					</thead>
-					<tbody>
-						{table.getRowModel().rows.map((row) => {
-							return (
-								<tr
-									key={row.id}
-									onClick={() => setClickedRow(row)}
-								>
-									{row.getVisibleCells().map((cell) => {
+				<div className="paramsTableHeaderMenu">
+					<WorkspaceBreadCrumbs clickedRow={clickedRow} />
+					<ParamsTableActionButtons table={table} />
+				</div>
+				<div className="paramsTableWrapper">
+					<table
+						className={`${currentDevice.DeviceType} paramTableRepresentation`}
+					>
+						<thead>
+							{table.getHeaderGroups().map((headerGroup) => (
+								<tr key={headerGroup.id}>
+									{headerGroup.headers.map((header) => {
 										return (
-											<td key={cell.id}>
-												{flexRender(
-													cell.column.columnDef.cell,
-													cell.getContext()
+											<th
+												key={header.id}
+												colSpan={header.colSpan}
+												className={header.id}
+											>
+												{header.isPlaceholder ? null : (
+													<div>
+														{flexRender(
+															header.column
+																.columnDef
+																.header,
+															header.getContext()
+														)}
+													</div>
 												)}
-											</td>
+											</th>
 										);
 									})}
 								</tr>
-							);
-						})}
-					</tbody>
-				</table>
-				<HintBlock clickedRow={clickedRow} />
-				<div className="flex items-center gap-2">
-					<button
-						className="border rounded p-1"
-						onClick={() => table.setPageIndex(0)}
-						disabled={!table.getCanPreviousPage()}
-					>
-						{"<<"}
-					</button>
-					<button
-						className="border rounded p-1"
-						onClick={() => table.previousPage()}
-						disabled={!table.getCanPreviousPage()}
-					>
-						{"<"}
-					</button>
-					<button
-						className="border rounded p-1"
-						onClick={() => table.nextPage()}
-						disabled={!table.getCanNextPage()}
-					>
-						{">"}
-					</button>
-					<button
-						className="border rounded p-1"
-						onClick={() =>
-							table.setPageIndex(table.getPageCount() - 1)
-						}
-						disabled={!table.getCanNextPage()}
-					>
-						{">>"}
-					</button>
-					<span className="flex items-center gap-1">
-						<div>Page</div>
-						<strong>
-							{table.getState().pagination.pageIndex + 1} of{" "}
-							{table.getPageCount()}
-						</strong>
-					</span>
-					<span className="flex items-center gap-1">
-						| Go to page:
-						<input
-							type="number"
-							defaultValue={
-								table.getState().pagination.pageIndex + 1
-							}
-							onChange={(e) => {
-								const page = e.target.value
-									? Number(e.target.value) - 1
-									: 0;
-								table.setPageIndex(page);
-							}}
-							className="border p-1 rounded w-16"
-						/>
-					</span>
-					<select
-						value={table.getState().pagination.pageSize}
-						onChange={(e) => {
-							table.setPageSize(Number(e.target.value));
-						}}
-					>
-						{[10, 20, 30, 40, 50].map((pageSize) => (
-							<option key={pageSize} value={pageSize}>
-								Show {pageSize}
-							</option>
-						))}
-					</select>
+							))}
+						</thead>
+						<tbody>
+							{table.getRowModel().rows.map((row) => {
+								return (
+									<tr
+										key={row.id}
+										onClick={() => setClickedRow(row)}
+									>
+										{row.getVisibleCells().map((cell) => {
+											return (
+												<td
+													key={cell.id}
+													className={getClassNameByCell(
+														cell
+													)}
+												>
+													{flexRender(
+														cell.column.columnDef
+															.cell,
+														cell.getContext()
+													)}
+												</td>
+											);
+										})}
+									</tr>
+								);
+							})}
+						</tbody>
+					</table>
+					<div className="emptyBlock"></div>
+					<HintBlock clickedRow={clickedRow} />
 				</div>
-				<div>{table.getRowModel().rows.length} Rows</div>
-				<button
-					onClick={() =>
-						console.log(
-							tableService.getTagsInfoFromTableData(tableNodes),
-							tableNodes
-						)
-					}
-				>
-					submit
-				</button>
 			</div>
 		</div>
 	);

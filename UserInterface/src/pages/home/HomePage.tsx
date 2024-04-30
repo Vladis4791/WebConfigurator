@@ -7,16 +7,12 @@ import newFileImage from './../../assets/images/new_file_white.svg';
 import downloadImage from './../../assets/images/download_white.svg';
 import settingsImage from './../../assets/images/settings.svg';
 import { useNavigate } from 'react-router-dom';
-import { DeviceAPI } from '../../APIs/device.api';
-import { appAPI } from '../../APIs/app.api';
-import ActionButtonWithFileObserver from '../../components/ActionButtonWithFileObserver/ButtonWithFileObserver';
 import ButtonWithModal from '../../components/ButtonWithModal/ButtonWithModal';
 import FileObserver from '../../components/fileObserver/FileObserver';
 import { FileObserverType } from '../../interfaces/FileObserver';
 import DeviceSelectPage from '../deviceSelect/DeviceSelectPage';
 import Settings from '../settings/Settings';
 import { MODAL_NAME_CREATE_DB, MODAL_NAME_OPEN_DB, MODAL_NAME_SETTINGS } from '../../constants/Global';
-import { CREATE_DB_FILE_HOTKEY } from '../../constants/ConfiguratorHotkeys';
 
 const HomePage = () => {
 

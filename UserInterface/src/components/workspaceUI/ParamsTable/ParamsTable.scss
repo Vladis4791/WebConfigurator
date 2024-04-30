@@ -3,32 +3,115 @@
 
 .ParamsTable {
 
-    position: relative;
-
-    
-
-    th {
-        width: 300px;
-    }
-
     .container {
         width: 90vw;
         max-width: 1920px;
         margin: 0 auto;
     }
 
-    .paramTableRepresentation {
-        margin-top: 50px;
+    .paramsTableWrapper {
+        display: flex;
+        flex-direction: column;
+        height: 78vh;
+        // padding-bottom: 20vh;
+        position: relative;
 
+        .emptyBlock {
+            flex-grow: 1;
+            background-color: #eee;
+            border: 1px solid #eee;
+        }
+    }
+
+    .paramsTableHeaderMenu {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+    }
+
+    .paramTableRepresentation {
+        display: block;
+        overflow-y: auto;
+        // max-height: 40vh;
+        // padding-bottom: 20vh;
+
+        &.Logika4 {
+            .choose {
+                width: 20vw;
+            }
+    
+            .param {
+                width: 10vw;
+            }
+    
+            .isEdited {
+                width: 5vw;
+            }
+    
+            .operative {
+                width: 10vw;
+            }
+    
+            .value {
+                width: 20vw;
+            }
+
+            .measurementUnits {
+                width: 5vw;
+            }
+    
+            .description {
+                width: 25vw;
+            }    
+        }
+        
+        &.Logika6 {
+            .choose {
+                width: 20vw;
+            }
+    
+            .param {
+                width: 10vw;
+            }
+    
+            .isEdited {
+                width: 5vw;
+            }
+            .value {
+                width: 20vw;
+            }
+
+            .measurementUnits {
+                width: 5vw;
+            }
+    
+            .description {
+                width: 30vw;
+            }    
+        }
+        margin-top: 20px; 
         border: 1px solid c.$border-color;
         border-collapse: collapse;
+
+            position: relative;
+            // padding-top: 40px;
+
+        thead {
+            position: sticky;
+            top: 0;
+            color: #fff;
+            font-weight: bold;
+            background-color: c.$theme-color;
+            z-index: 1;
+        }
+        
 
         td, th {
             border-top: 1px solid c.$border-color;
             padding: 10px;
         }
 
-        tr:hover {
+        tbody tr:hover {
             background-color: c.$selection-color;
         }
     }

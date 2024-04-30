@@ -2,11 +2,13 @@
 
     .detailedDescription {
         border: 1px solid black;
-        min-height: 30px;
+        height: 20vh;
+        padding: 10px;
     }
 
     .valueRange { 
         border: 1px solid black;
-        height: 30px;
+        min-height: 40px;
+        padding: 10px;
     }
 }

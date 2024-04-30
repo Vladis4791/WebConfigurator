@@ -1,21 +1,34 @@
 @use './../../styles/colors' as c;
 
-.ConnectionSettings {
-    padding: 25px;
-    color: c.$input-font-color;
-    
-    .actionButtons {
-        display: flex;
-        justify-content: center;
-        margin-top: 30px;
+.AboutProgram {
+    width: 60vw;
+    height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 15px;
+
+    .container {
+        width: 90%;
+        margin: 0 auto;
+    }
+
+
+    h2.configuratorVersion {
+        padding: 15px 0;
+        font-weight: 500;
+    }
+
+    p {
+        line-height: 24px;  
     }
 
     .p-tabview-panels {
         font-family: "Roboto" sans-serif;
+
     }
     .tabview {
         a {
-            font-family: 'Roboto';
+            font-family: 'Roboto' sans-serif;
+            
         }
 
         .p-tabview-ink-bar { 
